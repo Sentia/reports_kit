@@ -24,7 +24,7 @@ module ReportsKit
 
     def render
       data = { properties: properties.slice(:format), path: reports_data_path, report_class: js_report_class }
-      view_context.content_tag :div, nil, class: 'reports_kit_report form-inline', data: data do
+      view_context.content_tag :div, nil, class: 'reports_kit_report', data: data do
         elements = []
         elements << view_context.capture(self, &block) if block
         elements << view_context.content_tag(:div, nil, class: 'reports_kit_visualization')
