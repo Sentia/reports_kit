@@ -1,0 +1,30 @@
+language: ruby
+rvm:
+  - 2.4.2
+  - jruby-9.1.5.0
+gemfile:
+  - Gemfile
+  - test/gemfiles/activerecord52.gemfile
+  - test/gemfiles/activerecord50.gemfile
+  - test/gemfiles/activerecord42.gemfile
+sudo: false
+script: RUBYOPT=W0 bundle exec rake test
+before_install:
+  - gem install bundler
+  - mysql -e 'create database groupdate_test;'
+  - mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql
+  - psql -c 'create database groupdate_test;' -U postgres
+env:
+  - TRAVIS=t
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+matrix:
+  allow_failures:
+    - rvm: 2.4.2
+      gemfile: test/gemfiles/activerecord52.gemfile
+    - rvm: jruby-9.1.5.0
+      gemfile: test/gemfiles/activerecord52.gemfile
+    - rvm: jruby-9.1.5.0
+      gemfile: test/gemfiles/activerecord42.gemfile

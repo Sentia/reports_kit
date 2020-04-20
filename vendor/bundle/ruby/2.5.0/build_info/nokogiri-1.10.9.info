@@ -1,0 +1,3 @@
+--with-xml2-include=/opt/local/include/libxml2
+--with-xml2-lib=/opt/local/lib
+--with-xslt-dir=/opt/local
