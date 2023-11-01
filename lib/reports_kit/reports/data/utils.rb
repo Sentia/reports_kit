@@ -154,17 +154,27 @@ module ReportsKit
           label = dimension.key_to_label(dimension_instance)
           return label if label
           return dimension_instance.to_s if dimension.configured_by_column? && dimension.column_type == :integer
-          case dimension_instance
-          when Time, Date
+
+          if dimension_instance.is_a?(Time) || dimension_instance.is_a?(Date)
             Utils.format_display_time(dimension_instance)
-          when Integer
+          elsif dimension_instance.is_a?(Integer)
             raise ArgumentError.new("ids_dimension_instances must be present for Dimension with identifier: #{dimension_instance}") unless ids_dimension_instances
-            instance = ids_dimension_instances[dimension_instance.to_i]
+            instance = ids_dimension_instances[dimension_instance]
+            return unless instance
+            instance.to_s
+          elsif dimension_instance.is_a?(String) && validate_uuid(dimension_instance)
+            raise ArgumentError.new("ids_dimension_instances must be present for Dimension with identifier: #{dimension_instance}") unless ids_dimension_instances
+            instance = ids_dimension_instances[dimension_instance]
             return unless instance
             instance.to_s
           else
             dimension_instance.to_s.gsub(/\.0$/, '')
           end
+        end
+
+        def self.validate_uuid(uuid)
+          return true if uuid =~ /\A[\da-f]{32}\z/i
+          return true if uuid =~ /\A(urn:uuid:)?[\da-f]{8}-([\da-f]{4}-){3}[\da-f]{12}\z/i
         end
 
         def self.raw_value_to_value(raw_value, value_format_method)
