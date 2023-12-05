@@ -26,14 +26,14 @@ module ReportsKit
         ).freeze
         DEFAULT_OPTIONS = {
           scales: {
-            xAxes: [{
+            x: [{
               gridLines: {
                 display: false
               },
               barPercentage: 0.9,
               categoryPercentage: 0.9
             }],
-            yAxes: [{
+            y: [{
               ticks: {
                 beginAtZero: true
               }
