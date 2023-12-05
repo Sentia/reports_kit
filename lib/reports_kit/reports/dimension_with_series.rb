@@ -117,7 +117,7 @@ module ReportsKit
 
       def adapter
         @adapter ||= begin
-          adapter_name = model_class.connection_config[:adapter]
+          adapter_name = model_class.connection_db_config.configuration_hash[:adapter]
           adapter = ADAPTER_NAMES_CLASSES[adapter_name]
           raise ArgumentError.new("Unsupported adapter: #{adapter_name}") unless adapter
           adapter
